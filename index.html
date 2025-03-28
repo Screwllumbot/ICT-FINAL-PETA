@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            display: flex;
+			flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            padding: 25px;
+        }
+
+        .container {
+		    flex-direction: column;
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .calculator {
+            background-color: #ff7391;
+            padding: 20px;
+            border: 5px solid #ed4e70;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .display {
+            width: 90%;
+            height: 70px;
+            text-align: right;
+            font-size: 24px;
+            padding: 5px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .display input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: right;
+            font-size: 24px;
+        }
+
+        .display input:focus {
+            outline: none;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            width: 60px;
+            height: 50px;
+            font-size: 18px;
+            border: 2px solid #85b524;
+            background-color: #85b524;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .double {
+            grid-column: span 2;
+            width: 130px;
+        }
+
+        .equals {
+            background-color: #f7f2f4;
+            color: black;
+        }
+
+        .clear {
+            font-size: 16px;
+        }
+		
+		.author-name {
+		    display:  block;
+			width: 100%;
+			clear: both;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            margin-top: 10px
+			
+		}
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calculator">
+            <div class="display">
+                <input type="text" id="result" readonly>
+                <input type="text" id="display" readonly>
+            </div><br>
+            <div class="button-grid">
+                <button onclick="appendCharacter('1')">1</button>
+                <button onclick="appendCharacter('2')">2</button>
+                <button onclick="appendCharacter('3')">3</button>
+                <button onclick="increment()">++</button>
+                <button onclick="appendCharacter('4')">4</button>
+                <button onclick="appendCharacter('5')">5</button>
+                <button onclick="appendCharacter('6')">6</button>
+                <button onclick="decrement()">--</button>
+                <button onclick="appendCharacter('7')">7</button>
+                <button onclick="appendCharacter('8')">8</button>
+                <button onclick="appendCharacter('9')">9</button>
+                <button onclick="appendCharacter('+')">+</button>
+                <button onclick="appendCharacter('0')">0</button>
+                <button onclick="appendCharacter('.')">.</button>
+                <button onclick="appendCharacter('%')">%</button>
+                <button onclick="appendCharacter('-')">-</button>
+                <button onclick="backspace()">DEL</button>
+                <button onclick="power()">^</button>
+                <button onclick="appendCharacter('/')">/</button>
+                <button onclick="appendCharacter('*')">*</button>
+                <button onclick="clearDisplay()" class="double clear">CE</button>
+                <button onclick="calculateResult()" class="double equals">=</button>
+            </div>
+        </div>
+    </div>
+<div class="author-name">Created by: Gelito, Jarl Miguel D.  and  Ibañez, Mherie McKenzie T.</div>
+<script>
+    function appendCharacter(char) {
+        let display = document.getElementById("display");
+        display.value += char;
+    }
+
+    function clearDisplay() {
+        document.getElementById("display").value = "";
+        document.getElementById("result").value = "";
+    }
+
+    function backspace() {
+        let display = document.getElementById("display");
+        display.value = display.value.slice(0, -1);
+    }
+
+    function calculateResult() {
+        try {
+            let expression = document.getElementById("display").value;
+            expression = expression.replace(/\^/g, "**");
+            expression = expression.replace(/(\d+(\.\d*)?)%/g, "($1/100)");
+            expression = expression.replace(/--/g, "+");
+            let result = Function(`'use strict'; return (${expression})`)();
+            document.getElementById("result").value = expression;
+            document.getElementById("display").value = result;
+        } catch {
+            document.getElementById("display").value = "Error";
+        }
+    }
+
+    function increment() {
+        let display = document.getElementById("display");
+        let currentValue = parseFloat(display.value);
+        if (!isNaN(currentValue)) {
+            display.value = currentValue + 1;
+        }
+    }
+
+    function decrement() {
+        let display = document.getElementById("display");
+        let currentValue = parseFloat(display.value);
+        if (!isNaN(currentValue)) {
+            display.value = currentValue - 1;
+        }
+    }
+
+    function power() {
+        appendCharacter("^");
+    }
+</script>
+</body>
+</html>
